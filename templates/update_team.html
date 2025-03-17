@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Update Team</title>
+</head>
+<body>
+  <h1>Update Team</h1>
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <ul>
+      {% for category, message in messages %}
+        <li style="color: {% if category == 'danger' %}red{% elif category == 'success' %}green{% endif %};">
+          {{ message }}
+        </li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+  {% endwith %}
+  <form method="post">
+    <label>Name:</label>
+    <input type="text" name="name" value="{{ team.name }}" required><br>
+    <label>Year Founded:</label>
+    <input type="number" name="year_founded" value="{{ team.year_founded }}" required><br>
+    <label>Total Pole Positions:</label>
+    <input type="number" name="total_pole_positions" value="{{ team.total_pole_positions }}" required><br>
+    <label>Total Race Wins:</label>
+    <input type="number" name="total_race_wins" value="{{ team.total_race_wins }}" required><br>
+    <label>Total Constructor Titles:</label>
+    <input type="number" name="total_constructor_titles" value="{{ team.total_constructor_titles }}" required><br>
+    <label>Previous Season Position:</label>
+    <input type="number" name="previous_season_position" value="{{ team.previous_season_position }}" required><br>
+    <button type="submit">Update Team</button>
+  </form>
+  <p><a href="{{ url_for('list_teams') }}">Return to Teams List</a></p>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compare Drivers - F1 App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Compare Drivers</h2>
+                <p class="text-gray-600">Compare statistics between two F1 drivers</p>
+            </div>
+
+            <form id="compare-form" class="space-y-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="space-y-2">
+                        <label for="driver1" class="block text-sm font-medium text-gray-700">
+                            First Driver
+                        </label>
+                        <input type="text" id="driver1" required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter driver name">
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="driver2" class="block text-sm font-medium text-gray-700">
+                            Second Driver
+                        </label>
+                        <input type="text" id="driver2" required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter driver name">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit"
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z" />
+                        </svg>
+                        Compare Drivers
+                    </button>
+                </div>
+            </form>
+
+            <div class="overflow-x-auto">
+                <table id="results-table" class="min-w-full hidden divide-y divide-gray-200">
+                    <thead class="bg-gray-50"></thead>
+                    <tbody class="bg-white divide-y divide-gray-200"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById("compare-form").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            const driver1 = document.getElementById("driver1").value;
+            const driver2 = document.getElementById("driver2").value;
+            
+            try {
+                const response = await fetch(`/api/compare-drivers?driver1=${driver1}&driver2=${driver2}`);
+                const data = await response.json();
+                
+                if (!data.driver1 || !data.driver2) {
+                    alert("One or both drivers not found.");
+                    return;
+                }
+
+                const stats = ["age", "total_pole_positions", "total_race_wins", "total_points_scored", "total_world_titles", "total_fastest_laps"];
+                let tableHTML = `
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Statistic</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${data.driver1.name}</th>
+                            <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">${data.driver2.name}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                `;
+
+                stats.forEach(stat => {
+                    const value1 = data.driver1[stat];
+                    const value2 = data.driver2[stat];
+                    const isHigher = stat === "age" ? value1 < value2 : value1 > value2;
+                    const isLower = stat === "age" ? value1 > value2 : value1 < value2;
+                    
+                    tableHTML += `
+                        <tr class="hover:bg-gray-50 transition duration-150">
+                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                ${stat.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase())}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm ${isHigher ? 'bg-green-50 text-green-700 font-medium' : isLower ? 'bg-red-50 text-red-700' : 'text-gray-500'}">
+                                ${value1}
+                            </td>
+                            <td class="px-6 py-4 whitespace-nowrap text-sm ${isLower ? 'bg-green-50 text-green-700 font-medium' : isHigher ? 'bg-red-50 text-red-700' : 'text-gray-500'}">
+                                ${value2}
+                            </td>
+                        </tr>
+                    `;
+                });
+
+                tableHTML += '</tbody>';
+                const table = document.getElementById("results-table");
+                table.innerHTML = tableHTML;
+                table.style.display = "table";
+            } catch (error) {
+                console.error("Error:", error);
+            }
+        });
+    </script>
+</body>
+</html>

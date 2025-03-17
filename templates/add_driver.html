@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Driver - F1 App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="/static/firebase-login.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        {% block content %}
+        <div class="max-w-2xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Add New Driver</h2>
+                <p class="text-gray-600">Enter the driver's details below</p>
+            </div>
+    
+            <form id="driver-form" class="space-y-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Driver Name</label>
+                        <input type="text" id="name" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter driver name">
+                    </div>
+
+                    <div>
+                        <label for="age" class="block text-sm font-medium text-gray-700 mb-2">Age</label>
+                        <input type="number" id="age" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter age">
+                    </div>
+
+                    <div>
+                        <label for="team" class="block text-sm font-medium text-gray-700 mb-2">Team</label>
+                        <input type="text" id="team" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter team name">
+                    </div>
+
+                    <div>
+                        <label for="total_pole_positions" class="block text-sm font-medium text-gray-700 mb-2">Pole Positions</label>
+                        <input type="number" id="total_pole_positions" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter total poles">
+                    </div>
+
+                    <div>
+                        <label for="total_race_wins" class="block text-sm font-medium text-gray-700 mb-2">Race Wins</label>
+                        <input type="number" id="total_race_wins" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter total wins">
+                    </div>
+
+                    <div>
+                        <label for="total_points_scored" class="block text-sm font-medium text-gray-700 mb-2">Points Scored</label>
+                        <input type="number" id="total_points_scored" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter total points">
+                    </div>
+
+                    <div>
+                        <label for="total_world_titles" class="block text-sm font-medium text-gray-700 mb-2">World Titles</label>
+                        <input type="number" id="total_world_titles" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter world titles">
+                    </div>
+
+                    <div>
+                        <label for="total_fastest_laps" class="block text-sm font-medium text-gray-700 mb-2">Fastest Laps</label>
+                        <input type="number" id="total_fastest_laps" required
+                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition duration-200"
+                            placeholder="Enter fastest laps">
+                    </div>
+                </div>
+
+                <div class="flex items-center justify-end space-x-4 mt-8">
+                    <button type="button" onclick="window.history.back()" 
+                        class="px-6 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                        Cancel
+                    </button>
+                    <button type="submit"
+                        class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                        Add Driver
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <script>
+            // ...existing code...
+        </script>
+        {% endblock %}
+    </div>
+</body>
+</html>

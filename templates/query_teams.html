@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Query Teams - F1 App</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{{ request.url_for('static', path='firebase-login.js') }}"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        {% block content %}
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="mb-8 text-center">
+                <h2 class="text-3xl font-bold text-gray-800 mb-2">Query Teams</h2>
+                <p class="text-gray-600">Search for F1 teams based on their statistics</p>
+            </div>
+
+            <div id="login-box" class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p class="text-blue-700">You are not logged in. You can still search for teams.</p>
+            </div>
+
+            <button id="logout-btn" style="display: none;" 
+                class="mb-6 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
+                Logout
+            </button>
+
+            <form id="query-form" class="space-y-6 mb-8">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-2">
+                        <label for="attribute" class="block text-sm font-medium text-gray-700">
+                            Select Attribute
+                        </label>
+                        <select id="attribute" 
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            <option value="year_founded">Year Founded</option>
+                            <option value="total_pole_positions">Total Pole Positions</option>
+                            <option value="total_race_wins">Total Race Wins</option>
+                            <option value="total_constructor_titles">Total Constructor Titles</option>
+                            <option value="finishing_position_prev_season">Previous Season Position</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="comparison" class="block text-sm font-medium text-gray-700">
+                            Comparison
+                        </label>
+                        <select id="comparison"
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
+                            <option value="greater">Greater Than</option>
+                            <option value="less">Less Than</option>
+                            <option value="equal">Equal To</option>
+                        </select>
+                    </div>
+
+                    <div class="space-y-2">
+                        <label for="value" class="block text-sm font-medium text-gray-700">
+                            Value
+                        </label>
+                        <input type="number" id="value" required
+                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                            placeholder="Enter a number">
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit"
+                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                        </svg>
+                        Search Teams
+                    </button>
+                </div>
+            </form>
+
+            <div>
+                <h3 class="text-xl font-semibold text-gray-800 mb-4">Results</h3>
+                <ul id="results" class="space-y-3">
+                    <!-- Results will be populated by JavaScript -->
+                </ul>
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                updateUI(document.cookie);
+            });
+
+            document.getElementById("query-form").addEventListener("submit", async function(event) {
+                event.preventDefault();
+
+                const attribute = document.getElementById("attribute").value;
+                const comparison = document.getElementById("comparison").value;
+                const value = document.getElementById("value").value;
+
+                const response = await fetch(`/search-teams/?attribute=${attribute}&comparison=${comparison}&value=${value}`);
+                const data = await response.json();
+
+                const resultsList = document.getElementById("results");
+                resultsList.innerHTML = "";
+
+                if (data.teams.length === 0) {
+                    resultsList.innerHTML = `
+                        <li class="p-4 bg-gray-50 rounded-lg text-gray-600 text-center">
+                            No teams found matching your criteria
+                        </li>`;
+                } else {
+                    data.teams.forEach(team => {
+                        const li = document.createElement("li");
+                        li.className = "p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200";
+                        li.innerHTML = `
+                            <a href="/team/${team.name}" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
+                                <span class="font-semibold text-blue-600 hover:text-blue-700">
+                                    ${team.name}
+                                </span>
+                                <div class="text-gray-600 text-sm">
+                                    <span class="inline-block px-2 py-1 bg-blue-100 rounded-full mr-2">
+                                        Founded: ${team.year_founded}
+                                    </span>
+                                    <span class="inline-block px-2 py-1 bg-green-100 rounded-full">
+                                        ${team.total_race_wins} Race Wins
+                                    </span>
+                                </div>
+                            </a>`;
+                        resultsList.appendChild(li);
+                    });
+                }
+            });
+        </script>
+        {% endblock %}
+    </div>
+</body>
+</html>

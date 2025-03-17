@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Drivers List</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <div class="container mx-auto px-4 py-8">
+        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
+            <div class="mb-8 text-center">
+                <h1 class="text-3xl font-bold text-gray-800 mb-2">Formula 1 Drivers</h1>
+                <p class="text-gray-600">Current drivers and their statistics</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+                {% for driver in drivers %}
+                <div class="bg-white border border-gray-200 rounded-lg shadow-sm hover:shadow-md transition duration-200">
+                    <div class="p-5">
+                        <h2 class="text-xl font-semibold text-gray-800 mb-2">
+                            {{ driver.name }}
+                        </h2>
+                        <div class="space-y-2">
+                            <p class="text-gray-600 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M13 6a3 3 0 11-6 0 3 3 0 016 0zM18 8a2 2 0 11-4 0 2 2 0 014 0zM14 15a4 4 0 00-8 0v3h8v-3zM6 8a2 2 0 11-4 0 2 2 0 014 0zM16 18v-3a5.972 5.972 0 00-.75-2.906A3.005 3.005 0 0119 15v3h-3zM4.75 12.094A5.973 5.973 0 004 15v3H1v-3a3 3 0 013.75-2.906z"></path>
+                                </svg>
+                                Team: {{ driver.team }}
+                            </p>
+                            <p class="text-gray-600 flex items-center">
+                                <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path d="M6 2l2-2h4l2 2h4a2 2 0 012 2v14a2 2 0 01-2 2H2a2 2 0 01-2-2V4a2 2 0 012-2h4zM9 16V8l-2 2v6h2zm4 0V8l-2 2v6h2z"></path>
+                                </svg>
+                                Race Wins: {{ driver.total_race_wins }}
+                            </p>
+                        </div>
+                        <a href="/driver/{{ driver.name }}" 
+                           class="mt-4 inline-flex items-center text-blue-600 hover:text-blue-700">
+                            View Details
+                            <svg class="w-4 h-4 ml-1" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="flex justify-between items-center">
+                <a href="{{ url_for('dashboard') }}" 
+                   class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd"></path>
+                    </svg>
+                    Back to Dashboard
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
