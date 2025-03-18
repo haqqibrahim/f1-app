@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi import Query
@@ -136,6 +136,22 @@ async def search_teams(attribute: str, comparison: str, value: float):
 
     return {"teams": teams}
 
+@app.post("/add-driver")
+async def add_driver_endpoint(driver: Driver):
+    try:
+        add_driver(driver)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.post("/add-team")
+async def add_team_endpoint(team: Team):
+    try:
+        add_team(team)
+        return {"status": "success"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
 @app.get("/driver/{driver_id}", response_class=HTMLResponse)
 async def driver_details(request: Request, driver_id: str):
     """Fetch and display driver details."""
@@ -218,10 +234,27 @@ async def compare_teams(team1: str = Query(...), team2: str = Query(...)):
     doc1 = teams_ref.document(team1).get()
     doc2 = teams_ref.document(team2).get()
 
+
     if not doc1.exists or not doc2.exists:
         return {"error": "One or both teams not found"}
 
     return {
         "team1": doc1.to_dict(),
         "team2": doc2.to_dict()
+    }
+
+# Add after the existing /api/compare-teams endpoint
+
+@app.get("/api/compare-drivers")
+async def compare_drivers(driver1: str = Query(...), driver2: str = Query(...)):
+    """Fetch two drivers for comparison."""
+    doc1 = drivers_ref.document(driver1).get()
+    doc2 = drivers_ref.document(driver2).get()
+
+    if not doc1.exists or not doc2.exists:
+        return {"error": "One or both drivers not found"}
+
+    return {
+        "driver1": doc1.to_dict(),
+        "driver2": doc2.to_dict()
     }

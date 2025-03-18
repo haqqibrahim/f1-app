@@ -7,85 +7,86 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="{{ request.url_for('static', path='firebase-login.js') }}"></script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-900 min-h-screen text-gray-100">
     <div class="container mx-auto px-4 py-8">
         {% block content %}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <div class="mb-8 text-center">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">Query Teams</h2>
-                <p class="text-gray-600">Search for F1 teams based on their statistics</p>
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-t-xl p-8 border-b border-gray-700">
+                <h2 class="text-4xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-500 mb-2">
+                    Query Teams
+                </h2>
+                <p class="text-gray-400 text-center">Search for F1 teams based on their statistics</p>
             </div>
 
-            <div id="login-box" class="mb-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p class="text-blue-700">You are not logged in. You can still search for teams.</p>
-            </div>
-
-            <button id="logout-btn" style="display: none;" 
-                class="mb-6 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition duration-200">
-                Logout
-            </button>
-
-            <form id="query-form" class="space-y-6 mb-8">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div class="space-y-2">
-                        <label for="attribute" class="block text-sm font-medium text-gray-700">
-                            Select Attribute
-                        </label>
-                        <select id="attribute" 
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            <option value="year_founded">Year Founded</option>
-                            <option value="total_pole_positions">Total Pole Positions</option>
-                            <option value="total_race_wins">Total Race Wins</option>
-                            <option value="total_constructor_titles">Total Constructor Titles</option>
-                            <option value="finishing_position_prev_season">Previous Season Position</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label for="comparison" class="block text-sm font-medium text-gray-700">
-                            Comparison
-                        </label>
-                        <select id="comparison"
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 bg-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                            <option value="greater">Greater Than</option>
-                            <option value="less">Less Than</option>
-                            <option value="equal">Equal To</option>
-                        </select>
-                    </div>
-
-                    <div class="space-y-2">
-                        <label for="value" class="block text-sm font-medium text-gray-700">
-                            Value
-                        </label>
-                        <input type="number" id="value" required
-                            class="w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
-                            placeholder="Enter a number">
-                    </div>
+            <!-- Main Content Section -->
+            <div class="bg-gray-800 rounded-b-xl shadow-2xl p-8">
+                <!-- Auth Status -->
+                <div id="login-box" class="mb-6 p-4 bg-blue-900/30 rounded-lg border border-blue-500/20">
+                    <p class="text-blue-400">You are not logged in. You can still search for teams.</p>
                 </div>
 
-                <div class="text-center">
-                    <button type="submit"
-                        class="inline-flex items-center px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
-                        </svg>
-                        Search Teams
-                    </button>
-                </div>
-            </form>
+                <button id="logout-btn" style="display: none;" 
+                    class="mb-6 px-4 py-2 bg-gradient-to-r from-red-600 to-red-700 text-white rounded-lg hover:from-red-700 hover:to-red-800 transition duration-200">
+                    Logout
+                </button>
 
-            <div>
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">Results</h3>
-                <ul id="results" class="space-y-3">
-                    <!-- Results will be populated by JavaScript -->
-                </ul>
+                <!-- Search Form -->
+                <form id="query-form" class="space-y-6 mb-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Select Attribute</label>
+                            <select id="attribute" 
+                                class="w-full px-4 py-2.5 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                                <option value="year_founded">Year Founded</option>
+                                <option value="total_pole_positions">Total Pole Positions</option>
+                                <option value="total_race_wins">Total Race Wins</option>
+                                <option value="total_constructor_titles">Total Constructor Titles</option>
+                                <option value="finishing_position_prev_season">Previous Season Position</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Comparison</label>
+                            <select id="comparison"
+                                class="w-full px-4 py-2.5 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none">
+                                <option value="greater">Greater Than</option>
+                                <option value="less">Less Than</option>
+                                <option value="equal">Equal To</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Value</label>
+                            <input type="number" id="value" required
+                                class="w-full px-4 py-2.5 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none"
+                                placeholder="Enter a number">
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit"
+                            class="group inline-flex items-center px-6 py-3 bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:from-red-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500 transition duration-200">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 group-hover:scale-110 transition-transform" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd" />
+                            </svg>
+                            Search Teams
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Results Section -->
+                <div class="mt-8">
+                    <h3 class="text-xl font-semibold text-red-400 mb-4">Results</h3>
+                    <ul id="results" class="space-y-3">
+                        <!-- Results will be populated by JavaScript -->
+                    </ul>
+                </div>
             </div>
         </div>
 
         <script>
-            document.addEventListener("DOMContentLoaded", function() {
-                updateUI(document.cookie);
-            });
+            // ...existing DOMContentLoaded event listener...
 
             document.getElementById("query-form").addEventListener("submit", async function(event) {
                 event.preventDefault();
@@ -102,23 +103,23 @@
 
                 if (data.teams.length === 0) {
                     resultsList.innerHTML = `
-                        <li class="p-4 bg-gray-50 rounded-lg text-gray-600 text-center">
+                        <li class="p-4 bg-gray-700/50 rounded-lg text-gray-400 text-center">
                             No teams found matching your criteria
                         </li>`;
                 } else {
                     data.teams.forEach(team => {
                         const li = document.createElement("li");
-                        li.className = "p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition duration-200";
+                        li.className = "p-4 bg-gray-700/50 rounded-lg hover:bg-gray-700 transition duration-200";
                         li.innerHTML = `
                             <a href="/team/${team.name}" class="flex flex-col md:flex-row justify-between items-start md:items-center gap-2">
-                                <span class="font-semibold text-blue-600 hover:text-blue-700">
+                                <span class="font-medium text-red-400 hover:text-red-300">
                                     ${team.name}
                                 </span>
-                                <div class="text-gray-600 text-sm">
-                                    <span class="inline-block px-2 py-1 bg-blue-100 rounded-full mr-2">
+                                <div class="space-x-2">
+                                    <span class="inline-block px-2 py-1 bg-blue-900/50 text-blue-400 rounded-full">
                                         Founded: ${team.year_founded}
                                     </span>
-                                    <span class="inline-block px-2 py-1 bg-green-100 rounded-full">
+                                    <span class="inline-block px-2 py-1 bg-green-900/50 text-green-400 rounded-full">
                                         ${team.total_race_wins} Race Wins
                                     </span>
                                 </div>
@@ -131,4 +132,5 @@
         {% endblock %}
     </div>
 </body>
+</html>
 </html>

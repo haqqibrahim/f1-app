@@ -7,105 +7,158 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script type="module" src="{{ request.url_for('static', path='firebase-login.js') }}"></script>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-gray-900 min-h-screen text-gray-100">
     <div class="container mx-auto px-4 py-8">
         {% block content %}
-        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            <div class="mb-8">
-                <h2 class="text-3xl font-bold text-gray-800 mb-2">{{ team.name }}</h2>
-                <p class="text-gray-600">Formula 1 Team Profile</p>
+        <div class="max-w-4xl mx-auto">
+            <!-- Header Section -->
+            <div class="bg-gradient-to-r from-gray-800 to-gray-900 rounded-t-xl p-8 border-b border-gray-700">
+                <h2 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-red-400 to-purple-500 mb-2">
+                    {{ team.name }}
+                </h2>
+                <p class="text-gray-400">Formula 1 Team Profile</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="space-y-4">
-                    <div class="bg-blue-50 p-4 rounded-lg">
-                        <p class="text-sm text-blue-600 font-medium">Year Founded</p>
-                        <p class="text-2xl text-blue-900">{{ team.year_founded }}</p>
+            <!-- Main Content Section -->
+            <div class="bg-gray-800 rounded-b-xl shadow-2xl p-8">
+                <!-- Stats Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <!-- Left Column -->
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-br from-blue-500/10 to-blue-600/10 p-6 rounded-xl border border-blue-500/20">
+                            <p class="text-sm text-blue-400 font-medium mb-1">Year Founded</p>
+                            <p class="text-3xl text-blue-300">{{ team.year_founded }}</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-purple-500/10 to-purple-600/10 p-6 rounded-xl border border-purple-500/20">
+                            <p class="text-sm text-purple-400 font-medium mb-1">Constructor Titles</p>
+                            <p class="text-3xl text-purple-300">{{ team.total_constructor_titles }}</p>
+                        </div>
                     </div>
 
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <p class="text-sm text-purple-600 font-medium">Constructor Titles</p>
-                        <p class="text-2xl text-purple-900">{{ team.total_constructor_titles }}</p>
+                    <!-- Right Column -->
+                    <div class="space-y-4">
+                        <div class="bg-gradient-to-br from-green-500/10 to-green-600/10 p-6 rounded-xl border border-green-500/20">
+                            <p class="text-sm text-green-400 font-medium mb-1">Race Wins</p>
+                            <p class="text-3xl text-green-300">{{ team.total_race_wins }}</p>
+                        </div>
+
+                        <div class="bg-gradient-to-br from-yellow-500/10 to-yellow-600/10 p-6 rounded-xl border border-yellow-500/20">
+                            <p class="text-sm text-yellow-400 font-medium mb-1">Pole Positions</p>
+                            <p class="text-3xl text-yellow-300">{{ team.total_pole_positions }}</p>
+                        </div>
                     </div>
                 </div>
 
-                <div class="space-y-4">
-                    <div class="bg-green-50 p-4 rounded-lg">
-                        <p class="text-sm text-green-600 font-medium">Race Wins</p>
-                        <p class="text-2xl text-green-900">{{ team.total_race_wins }}</p>
-                    </div>
+                <!-- Edit Controls -->
+                <div id="edit-controls" style="display: none;" class="border-t border-gray-700 pt-8 mt-8">
+                    <h3 class="text-xl font-semibold text-red-400 mb-6">Edit Team Details</h3>
+                    <form action="/edit-team/{{ team.name }}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Year Founded</label>
+                            <input type="number" name="year_founded" value="{{ team.year_founded }}" required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                        </div>
 
-                    <div class="bg-yellow-50 p-4 rounded-lg">
-                        <p class="text-sm text-yellow-600 font-medium">Pole Positions</p>
-                        <p class="text-2xl text-yellow-900">{{ team.total_pole_positions }}</p>
-                    </div>
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Total Pole Positions</label>
+                            <input type="number" name="total_pole_positions" value="{{ team.total_pole_positions }}" required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Total Race Wins</label>
+                            <input type="number" name="total_race_wins" value="{{ team.total_race_wins }}" required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Constructor Titles</label>
+                            <input type="number" name="total_constructor_titles" value="{{ team.total_constructor_titles }}" required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="block text-sm font-medium text-gray-300">Previous Season Position</label>
+                            <input type="number" name="finishing_position_prev_season" value="{{ team.finishing_position_prev_season }}" required
+                                class="w-full px-4 py-3 rounded-lg bg-gray-700 border border-gray-600 text-white placeholder-gray-400 focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none">
+                        </div>
+
+                        <div class="col-span-2 flex justify-end space-x-4 mt-6">
+                            <button type="submit"
+                                class="px-6 py-3 bg-gradient-to-r from-red-600 to-purple-600 text-white rounded-lg hover:from-red-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-red-500 transition duration-200">
+                                Save Changes
+                            </button>
+                        </div>
+                    </form>
                 </div>
-            </div>
 
-            <div id="edit-controls" style="display: none;" class="border-t border-gray-200 pt-8 mt-8">
-                <h3 class="text-xl font-semibold text-gray-800 mb-4">Edit Team Details</h3>
-                <form action="/edit-team/{{ team.name }}" method="post" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Year Founded</label>
-                        <input type="number" name="year_founded" value="{{ team.year_founded }}" required
-                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Total Pole Positions</label>
-                        <input type="number" name="total_pole_positions" value="{{ team.total_pole_positions }}" required
-                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Total Race Wins</label>
-                        <input type="number" name="total_race_wins" value="{{ team.total_race_wins }}" required
-                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Constructor Titles</label>
-                        <input type="number" name="total_constructor_titles" value="{{ team.total_constructor_titles }}" required
-                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div class="space-y-2">
-                        <label class="block text-sm font-medium text-gray-700">Previous Season Position</label>
-                        <input type="number" name="finishing_position_prev_season" value="{{ team.finishing_position_prev_season }}" required
-                            class="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none">
-                    </div>
-
-                    <div class="col-span-2 flex justify-end space-x-4 mt-6">
-                        <button type="submit"
-                            class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition">
-                            Save Changes
-                        </button>
-                    </div>
-                </form>
-
-                <form action="/delete-team/{{ team.name }}" method="post" 
-                    onsubmit="return confirm('Are you sure you want to delete this team?');"
-                    class="mt-4">
-                    <button type="submit"
-                        class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition">
-                        Delete Team
-                    </button>
-                </form>
-            </div>
-
-            <div class="mt-8 flex justify-between items-center">
-                <a href="/query_teams" 
-                    class="inline-flex items-center px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
-                    </svg>
-                    Back to Search
-                </a>
+                <!-- Navigation -->
+                <div class="mt-8">
+                    <a href="/query_teams" 
+                        class="inline-flex items-center px-6 py-3 bg-gray-700 text-gray-300 rounded-lg hover:bg-gray-600 transition duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L5.414 9H17a1 1 0 110 2H5.414l4.293 4.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+                        </svg>
+                        Back to Search
+                    </a>
+                </div>
             </div>
         </div>
 
         <script type="module">
-            // ...existing Firebase auth code...
+            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.22.2/firebase-auth.js";
+
+            // Get auth instance
+            const auth = getAuth();
+
+            // Listen for auth state changes
+            onAuthStateChanged(auth, (user) => {
+                const editControls = document.getElementById('edit-controls');
+                if (user) {
+                    // Show edit controls if user is authenticated
+                    editControls.style.display = 'block';
+                } else {
+                    // Hide edit controls if user is not authenticated
+                    editControls.style.display = 'none';
+                }
+            });
+
+            // Add form submission handler
+            const editForm = document.querySelector('form[action^="/edit-team/"]');
+            if (editForm) {
+                editForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    
+                    const formData = {
+                        name: '{{ team.name }}',
+                        year_founded: parseInt(document.querySelector('input[name="year_founded"]').value),
+                        total_pole_positions: parseInt(document.querySelector('input[name="total_pole_positions"]').value),
+                        total_race_wins: parseInt(document.querySelector('input[name="total_race_wins"]').value),
+                        total_constructor_titles: parseInt(document.querySelector('input[name="total_constructor_titles"]').value),
+                        finishing_position_prev_season: parseInt(document.querySelector('input[name="finishing_position_prev_season"]').value)
+                    };
+
+                    try {
+                        const response = await fetch(editForm.action, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json'
+                            },
+                            body: JSON.stringify(formData)
+                        });
+
+                        if (response.ok) {
+                            window.location.reload();
+                        } else {
+                            const error = await response.json();
+                            alert('Error updating team: ' + error.detail);
+                        }
+                    } catch (error) {
+                        alert('Error: ' + error.message);
+                    }
+                });
+            }
         </script>
         {% endblock %}
     </div>
